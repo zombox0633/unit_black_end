@@ -21,4 +21,9 @@ export class HotelService {
 
     return hotel;
   }
+
+  async createHotelData(name: string, price: number): Promise<Hotel> {
+    const newHotel = this.hotelRepository.create({ name: name, price: price });
+    return this.hotelRepository.save(newHotel);
+  }
 }
