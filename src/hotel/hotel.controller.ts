@@ -10,7 +10,7 @@ import {
 
 import { HotelService } from './hotel.service';
 import { Hotel } from './hotel.entity';
-import { HotelResponseDto } from './dto/h.response.dto';
+import { HotelResponseDto } from './dto/hotel.response.dto';
 import { ResponseInterceptor } from 'src/config/response.errorHandling';
 import { HttpExceptionFilter } from 'src/config/http-exception.errorHanding';
 import {
