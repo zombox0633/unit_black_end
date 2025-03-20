@@ -10,7 +10,11 @@ import {
 
 import { HotelService } from './hotel.service';
 import { Hotel } from './hotel.entity';
-import { HotelDashboardDto, HotelResponseDto } from './dto/hotel.response.dto';
+import {
+  HotelDashboardDto,
+  HotelDto,
+  HotelResponseDto,
+} from './dto/hotel.response.dto';
 import { ResponseInterceptor } from 'src/config/response.errorHandling';
 import { HttpExceptionFilter } from 'src/config/http-exception.errorHanding';
 import {
@@ -25,7 +29,7 @@ export class HotelController {
   constructor(private readonly hotelService: HotelService) {}
 
   @Get('/listhotel')
-  async getListHotel(): Promise<HotelResponseDto<Hotel[]>> {
+  async getListHotel(): Promise<HotelResponseDto<HotelDto[]>> {
     const response = await this.hotelService.getListHotel();
     return {
       RespCode: 200,

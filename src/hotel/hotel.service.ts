@@ -10,7 +10,8 @@ import {
   CreateHotelRequestDto,
   SearchHotelByDateRequestDto,
 } from './dto/hotel.request.dto';
-import { HotelDashboardDto } from './dto/hotel.response.dto';
+import { HotelDashboardDto, HotelDto } from './dto/hotel.response.dto';
+import { formatDateTime } from 'src/utils/utils';
 
 @Injectable()
 export class HotelService {
@@ -19,8 +20,13 @@ export class HotelService {
     private readonly hotelRepository: Repository<Hotel>,
   ) {}
 
-  async getListHotel(): Promise<Hotel[]> {
-    return this.hotelRepository.find();
+  async getListHotel(): Promise<HotelDto[]> {
+    const hotelData = await this.hotelRepository.find();
+
+    return hotelData.map((hotel) => ({
+      ...hotel,
+      doingtime: formatDateTime(hotel.doingtime),
+    }));
   }
 
   async getHotelByID(id: number): Promise<Hotel> {
