@@ -1,13 +1,24 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  UseFilters,
+  UseInterceptors,
+} from '@nestjs/common';
+
 import { HotelService } from './hotel.service';
 import { Hotel } from './hotel.entity';
 import { HotelResponseDto } from './dto/HotelResponseDto';
+import { ResponseInterceptor } from 'src/utils/response.errorHandling';
+import { HttpExceptionFilter } from 'src/utils/http-exception.errorHanding';
 
-@Controller('api/listhotel')
+@Controller('api')
+@UseInterceptors(ResponseInterceptor)
+@UseFilters(HttpExceptionFilter)
 export class HotelController {
   constructor(private readonly hotelService: HotelService) {}
 
-  @Get()
+  @Get('/listhotel')
   async getListHotel(): Promise<HotelResponseDto<Hotel[]>> {
     const listHotel = await this.hotelService.getListHotel();
     return {
@@ -17,7 +28,7 @@ export class HotelController {
     };
   }
 
-  @Get('/:id')
+  @Get('/listhotel/:id')
   async getHotelById(
     @Param('id') id: number,
   ): Promise<HotelResponseDto<Hotel[]>> {
