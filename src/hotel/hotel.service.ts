@@ -1,7 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hotel } from './hotel.entity';
 import { Repository } from 'typeorm';
+import {
+  CreateHotelRequestDto,
+  SearchHotelByDateRequestDto,
+} from './dto/hotel.requst.dto';
 
 @Injectable()
 export class HotelService {
@@ -22,8 +30,38 @@ export class HotelService {
     return hotel;
   }
 
-  async createHotelData(name: string, price: number): Promise<Hotel> {
-    const newHotel = this.hotelRepository.create({ name: name, price: price });
+  async createHotelData(
+    createHotelRequestDto: CreateHotelRequestDto,
+  ): Promise<Hotel> {
+    const newHotel = this.hotelRepository.create({
+      name: createHotelRequestDto.name,
+      price: createHotelRequestDto.price,
+    });
     return this.hotelRepository.save(newHotel);
+  }
+
+  async searchHotelByDate(
+    searchHotelByDateRequestDto: SearchHotelByDateRequestDto,
+  ): Promise<Hotel[]> {
+    const { date } = searchHotelByDateRequestDto;
+
+    const searchDate = new Date(date);
+    if (isNaN(searchDate.getTime())) {
+      throw new BadRequestException('Invalid date format');
+    }
+    const formattedDate = searchDate.toISOString().split('T')[0];
+
+    const hotel = await this.hotelRepository
+      .createQueryBuilder('hotel')
+      .where('Date(hotel.doingtime) = :searchDate', {
+        searchDate: formattedDate,
+      })
+      .getMany();
+
+    if (hotel.length === 0) {
+      throw new NotFoundException(`No hotels available on ${formattedDate}`);
+    }
+
+    return hotel;
   }
 }

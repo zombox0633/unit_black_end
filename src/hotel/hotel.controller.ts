@@ -10,10 +10,13 @@ import {
 
 import { HotelService } from './hotel.service';
 import { Hotel } from './hotel.entity';
-import { HotelResponseDto } from './dto/Hotel.response.dto';
+import { HotelResponseDto } from './dto/h.response.dto';
 import { ResponseInterceptor } from 'src/config/response.errorHandling';
 import { HttpExceptionFilter } from 'src/config/http-exception.errorHanding';
-import { CreateHotelRequestDto } from './dto/CreateHotel.requst.dto';
+import {
+  CreateHotelRequestDto,
+  SearchHotelByDateRequestDto,
+} from './dto/hotel.requst.dto';
 
 @Controller('api')
 @UseInterceptors(ResponseInterceptor)
@@ -23,11 +26,11 @@ export class HotelController {
 
   @Get('/listhotel')
   async getListHotel(): Promise<HotelResponseDto<Hotel[]>> {
-    const listHotel = await this.hotelService.getListHotel();
+    const response = await this.hotelService.getListHotel();
     return {
       RespCode: 200,
       RespMessage: 'success',
-      Result: listHotel,
+      Result: response,
     };
   }
 
@@ -35,11 +38,11 @@ export class HotelController {
   async getHotelById(
     @Param('id') id: number,
   ): Promise<HotelResponseDto<Hotel[]>> {
-    const hotelData = await this.hotelService.getHotelByID(id);
+    const response = await this.hotelService.getHotelByID(id);
     return {
       RespCode: 200,
       RespMessage: 'success',
-      Result: [hotelData],
+      Result: [response],
     };
   }
 
@@ -49,13 +52,29 @@ export class HotelController {
   ): Promise<HotelResponseDto<Hotel[]>> {
     // console.log(createHotelRequestDto);
     const response = await this.hotelService.createHotelData(
-      createHotelRequestDto.name,
-      createHotelRequestDto.price,
+      createHotelRequestDto,
     );
     return {
       RespCode: 200,
       RespMessage: 'success',
       Result: [response],
+    };
+  }
+
+  @Post('/search/hotel')
+  async searchHotelByDate(
+    @Body() searchHotelByDateRequestDto: SearchHotelByDateRequestDto,
+  ): Promise<HotelResponseDto<Hotel[]>> {
+    console.log(searchHotelByDateRequestDto);
+
+    const response = await this.hotelService.searchHotelByDate(
+      searchHotelByDateRequestDto,
+    );
+
+    return {
+      RespCode: 200,
+      RespMessage: 'success',
+      Result: response,
     };
   }
 }

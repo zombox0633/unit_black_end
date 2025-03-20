@@ -16,6 +16,6 @@ export class Hotel {
   @Column('numeric', { precision: 9, scale: 2 })
   price: number;
 
-  @CreateDateColumn({ type: 'timestamp with time zone' })
+  @CreateDateColumn({ type: 'timestamptz' })
   doingtime: Date;
 }
