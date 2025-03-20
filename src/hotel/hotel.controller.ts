@@ -10,7 +10,7 @@ import {
 
 import { HotelService } from './hotel.service';
 import { Hotel } from './hotel.entity';
-import { HotelResponseDto } from './dto/hotel.response.dto';
+import { HotelDashboardDto, HotelResponseDto } from './dto/hotel.response.dto';
 import { ResponseInterceptor } from 'src/config/response.errorHandling';
 import { HttpExceptionFilter } from 'src/config/http-exception.errorHanding';
 import {
@@ -65,7 +65,7 @@ export class HotelController {
   async searchHotelByDate(
     @Body() searchHotelByDateRequestDto: SearchHotelByDateRequestDto,
   ): Promise<HotelResponseDto<Hotel[]>> {
-    console.log(searchHotelByDateRequestDto);
+    // console.log(searchHotelByDateRequestDto);
 
     const response = await this.hotelService.searchHotelByDate(
       searchHotelByDateRequestDto,
@@ -76,5 +76,11 @@ export class HotelController {
       RespMessage: 'success',
       Result: response,
     };
+  }
+
+  @Get('/dashboard/hotel')
+  async getHotelDashboard(): Promise<HotelDashboardDto> {
+    const response = await this.hotelService.getHotelDashboard();
+    return response;
   }
 }

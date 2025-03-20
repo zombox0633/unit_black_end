@@ -10,6 +10,7 @@ import {
   CreateHotelRequestDto,
   SearchHotelByDateRequestDto,
 } from './dto/hotel.request.dto';
+import { HotelDashboardDto } from './dto/hotel.response.dto';
 
 @Injectable()
 export class HotelService {
@@ -63,5 +64,29 @@ export class HotelService {
     }
 
     return hotel;
+  }
+
+  async getHotelDashboard(): Promise<HotelDashboardDto> {
+    const hotelData = await this.hotelRepository.find();
+    const sortHotel = hotelData.sort((a, b) => a.price - b.price);
+    const lastAddedHotel = hotelData.reduce((prev, curr) =>
+      prev.doingtime > curr.doingtime ? prev : curr,
+    );
+
+    return {
+      RespCode: 200,
+      RespMessage: 'success',
+      Result: {
+        Data: hotelData,
+        Dashboard: {
+          AllHotel: hotelData.length,
+          Price: {
+            High: sortHotel[sortHotel.length - 1].name,
+            Low: sortHotel[0].name,
+          },
+          LastHotelAdd: lastAddedHotel.doingtime,
+        },
+      },
+    };
   }
 }
