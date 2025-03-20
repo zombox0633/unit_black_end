@@ -16,7 +16,7 @@ import { HttpExceptionFilter } from 'src/config/http-exception.errorHanding';
 import {
   CreateHotelRequestDto,
   SearchHotelByDateRequestDto,
-} from './dto/hotel.requst.dto';
+} from './dto/hotel.request.dto';
 
 @Controller('api')
 @UseInterceptors(ResponseInterceptor)

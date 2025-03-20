@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 import {
   CreateHotelRequestDto,
   SearchHotelByDateRequestDto,
-} from './dto/hotel.requst.dto';
+} from './dto/hotel.request.dto';
 
 @Injectable()
 export class HotelService {
