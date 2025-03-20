@@ -1,5 +1,12 @@
 import { Hotel } from '../hotel.entity';
 
+export class HotelDto {
+  id: number;
+  name: string;
+  price: number;
+  doingtime: string;
+}
+
 export class HotelResponseDto<T> {
   RespCode: number;
   RespMessage: string;
