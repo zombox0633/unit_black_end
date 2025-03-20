@@ -41,7 +41,7 @@ export class HotelController {
   @Get('/listhotel/:id')
   async getHotelById(
     @Param('id') id: number,
-  ): Promise<HotelResponseDto<Hotel[]>> {
+  ): Promise<HotelResponseDto<HotelDto[]>> {
     const response = await this.hotelService.getHotelByID(id);
     return {
       RespCode: 200,
@@ -68,7 +68,7 @@ export class HotelController {
   @Post('/search/hotel')
   async searchHotelByDate(
     @Body() searchHotelByDateRequestDto: SearchHotelByDateRequestDto,
-  ): Promise<HotelResponseDto<Hotel[]>> {
+  ): Promise<HotelResponseDto<HotelDto[]>> {
     // console.log(searchHotelByDateRequestDto);
 
     const response = await this.hotelService.searchHotelByDate(

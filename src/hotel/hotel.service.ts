@@ -29,12 +29,15 @@ export class HotelService {
     }));
   }
 
-  async getHotelByID(id: number): Promise<Hotel> {
+  async getHotelByID(id: number): Promise<HotelDto> {
     const hotel = await this.hotelRepository.findOne({ where: { id } });
 
     if (!hotel) throw new NotFoundException(`Hotel with ID ${id} is not found`);
 
-    return hotel;
+    return {
+      ...hotel,
+      doingtime: formatDateTime(hotel.doingtime),
+    };
   }
 
   async createHotelData(
@@ -49,7 +52,7 @@ export class HotelService {
 
   async searchHotelByDate(
     searchHotelByDateRequestDto: SearchHotelByDateRequestDto,
-  ): Promise<Hotel[]> {
+  ): Promise<HotelDto[]> {
     const { date } = searchHotelByDateRequestDto;
 
     const searchDate = new Date(date);
@@ -69,13 +72,21 @@ export class HotelService {
       throw new NotFoundException(`No hotels available on ${formattedDate}`);
     }
 
-    return hotel;
+    return hotel.map((hotel) => ({
+      ...hotel,
+      doingtime: formatDateTime(hotel.doingtime),
+    }));
   }
 
   async getHotelDashboard(): Promise<HotelDashboardDto> {
     const hotelData = await this.hotelRepository.find();
-    const sortHotel = hotelData.sort((a, b) => a.price - b.price);
-    const lastAddedHotel = hotelData.reduce((prev, curr) =>
+    const mapHotelData = hotelData.map((hotel) => ({
+      ...hotel,
+      doingtime: formatDateTime(hotel.doingtime),
+    }));
+
+    const sortHotel = mapHotelData.sort((a, b) => a.price - b.price);
+    const lastAddedHotel = mapHotelData.reduce((prev, curr) =>
       prev.doingtime > curr.doingtime ? prev : curr,
     );
 
@@ -83,7 +94,7 @@ export class HotelService {
       RespCode: 200,
       RespMessage: 'success',
       Result: {
-        Data: hotelData,
+        Data: mapHotelData,
         Dashboard: {
           AllHotel: hotelData.length,
           Price: {

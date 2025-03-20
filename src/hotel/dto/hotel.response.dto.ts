@@ -1,5 +1,3 @@
-import { Hotel } from '../hotel.entity';
-
 export class HotelDto {
   id: number;
   name: string;
@@ -17,14 +15,14 @@ export class HotelDashboardDto {
   RespCode: number;
   RespMessage: string;
   Result: {
-    Data: Hotel[];
+    Data: HotelDto[];
     Dashboard: {
       AllHotel: number;
       Price: {
         High: string;
         Low: string;
       };
-      LastHotelAdd: Date;
+      LastHotelAdd: string;
     };
   };
 }
