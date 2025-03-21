@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   Param,
   Post,
   UseFilters,
@@ -51,6 +52,7 @@ export class HotelController {
   }
 
   @Post('/create/hotel')
+  @HttpCode(200)
   async createHotelData(
     @Body() createHotelRequestDto: CreateHotelRequestDto,
   ): Promise<HotelResponseDto<Hotel[]>> {
@@ -66,6 +68,7 @@ export class HotelController {
   }
 
   @Post('/search/hotel')
+  @HttpCode(200)
   async searchHotelByDate(
     @Body() searchHotelByDateRequestDto: SearchHotelByDateRequestDto,
   ): Promise<HotelResponseDto<HotelDto[]>> {
