@@ -21,9 +21,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         RespCode: number;
         RespMessage: string;
       };
-      response
-        .status(HttpStatus.OK)
-        .json({ RespCode, RespMessage, Result: null });
+      response.status(RespCode).json({ RespCode, RespMessage, Result: null });
       return;
     }
 
@@ -31,7 +29,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       const status = exception.getStatus();
       const exceptionResponse = exception.getResponse();
 
-      response.status(HttpStatus.OK).json({
+      response.status(status).json({
         RespCode: status,
         RespMessage:
           typeof exceptionResponse === 'object' &&
@@ -44,7 +42,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       return;
     }
 
-    response.status(HttpStatus.OK).json({
+    response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       RespCode: HttpStatus.INTERNAL_SERVER_ERROR,
       RespMessage: 'Internal server error 😿',
       Result: null,
